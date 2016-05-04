@@ -231,6 +231,10 @@ class AuditReader
                 throw new \RuntimeException('column name not found  for' . $idField);
             }
 
+            if ($className == 'AppBundle\Entity\Rapport' && array_keys($id)[0] === 'bygning_id') {
+                $columnName = array_keys($id)[0];
+            }
+
             $whereSQL .= " AND e." . $columnName . " = ?";
         }
 
@@ -301,6 +305,11 @@ class AuditReader
             }
         }
 
+        $additionalWhere = $this->findWhere($className, 'e');
+        if ($additionalWhere) {
+            $whereSQL .= ' AND ' . $additionalWhere;
+        }
+
         $query = "SELECT " . implode(', ', $columnList) . " FROM " . $tableName . " e " . $joinSql . " WHERE " . $whereSQL . " ORDER BY e.rev DESC";
 
         $row = $this->em->getConnection()->fetchAssoc($query, $values);
@@ -316,6 +325,10 @@ class AuditReader
         unset($row[$this->config->getRevisionTypeFieldName()]);
 
         return $this->createEntity($class->name, $row, $revision);
+    }
+
+    protected function findWhere($className, $alias) {
+        return '1=1';
     }
 
     /**
@@ -427,6 +440,14 @@ class AuditReader
                         } else {
                             try {
                                 $value = $this->find($targetClass->name, $pk, $revision, array('threatDeletionsAsExceptions' => true));
+                            } catch (NoRevisionFoundException $e) {
+                                // A Rapport pointing to this Bygning may not exist.
+                                if ($className == 'AppBundle\Entity\Bygning' && $field == 'rapport') {
+                                    $value = null;
+                                }
+                                else {
+                                    throw $e;
+                                }
                             } catch (DeletedException $e) {
                                 $value = null;
                             }
