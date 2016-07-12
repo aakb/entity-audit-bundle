@@ -220,7 +220,7 @@ class AuditReader
             $id = array($class->identifier[0] => $id);
         }
 
-        $whereSQL  = "e." . $this->config->getRevisionFieldName() ." <= ?";
+        $whereSQL  = "e." . $this->config->getRevisionFieldName() . " " . (!empty($options['exactRevision']) ? "=" : "<=" ) . " ?";
 
         foreach ($class->identifier AS $idField) {
             if (isset($class->fieldMappings[$idField])) {
