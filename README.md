@@ -24,7 +24,7 @@ create the necessary DDL statements for your audited entities.
 
 ## Installation (In Symfony2 Application)
 
-###Installing the bundle
+### Installing the bundle
 
 Simply run assuming you have installed composer.phar or composer binary:
 
@@ -32,7 +32,7 @@ Simply run assuming you have installed composer.phar or composer binary:
 $ php composer.phar require simplethings/entity-audit-bundle
 ```
 
-###Enable the bundle
+### Enable the bundle
 
 Finally, enable the bundle in the kernel:
 
@@ -50,11 +50,11 @@ public function registerBundles()
 }
 ```
 
-###Configuration
+### Configuration
 
 Load extension "simple_things_entity_audit" and specify the audited entities (yes, that ugly for now!)
 
-#####app/config/config.yml
+##### app/config/config.yml
 ```yml
 simple_things_entity_audit:
     audited_entities:
@@ -63,7 +63,7 @@ simple_things_entity_audit:
 ```
 If you need to exclude some entity properties from triggering a revision use:
 
-#####app/config/config.yml
+##### app/config/config.yml
 ```yml
 simple_things_entity_audit:
     global_ignore_columns:
@@ -71,7 +71,7 @@ simple_things_entity_audit:
         - updated_at
 ```
 
-###Creating new tables
+### Creating new tables
 
 Call the command below to see the new tables in the update schema queue.
 
@@ -223,7 +223,7 @@ A default Symfony2 controller is provided that gives basic viewing capabilities 
 To use the controller, import the routing **(don't forget to secure the prefix you set so that
 only appropriate users can get access)**
 
-#####app/config/routing.yml
+##### app/config/routing.yml
 ```yml
 simple_things_entity_audit:
     resource: "@SimpleThingsEntityAuditBundle/Resources/config/routing.yml"
